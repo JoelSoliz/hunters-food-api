@@ -4,6 +4,7 @@ from sqlalchemy.ext.declarative import declarative_base
 
 
 Base = declarative_base()
+
 class Business (Base):
     __tablename__='business'
     id_business = Column(String(4), primary_key=True)

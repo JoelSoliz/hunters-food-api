@@ -11,10 +11,13 @@ class Product (Base):
     id_product_type = Column(String(4), ForeignKey('product_type'))
     id_business = Column(String(4), ForeignKey('business.id_business'))
     id_user = Column(String(4), ForeignKey('user.id_user'))
+    id_offer_time = Column(String(4), ForeignKey('offer_time.id_offer_time'))
     name_product = Column(String(100), nullable=False)
     price = Column(FLOAT(10.2), nullable= False)
     image_product=Column(BLOB, nullable=False)
-    Date_of_Bith = Column(DateTime(), default=datetime.now())
+    start_time = Column(datetime(), nullable=False)
+    final_time = Column(datetime(), nullable=False)
+    date_of_bith = Column(DateTime(), default=datetime.now())
     
     def __str__(self):
        return self.name_product
