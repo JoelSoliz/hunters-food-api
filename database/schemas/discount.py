@@ -5,7 +5,6 @@ from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
 
-
 class Discount (Base):
     __tablename__='discount'
     id_discount = Column(String(4), primary_key=True)
