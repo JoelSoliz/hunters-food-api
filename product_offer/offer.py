@@ -16,10 +16,10 @@ def get_page_of_results(current_page, page_count=5):
                     'total_elements':count_data, 
                     'element_per_page':page_count}
     else:
-        dictionary = {'results':None, 
-                    'current_page':None,
-                    'total_pages': None,
-                    'total_elements': None, 
-                    'element_per_page': None}
+        dictionary = {'results': [], 
+                    'current_page': 0,
+                    'total_pages': 0,
+                    'total_elements': 0, 
+                    'element_per_page': 0}
                     
     return dictionary
