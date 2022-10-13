@@ -6,6 +6,7 @@ An API that provides all information and data about [Hunters Food App](https://g
 
 - [Technologies](#technologies)
 - [Setup](#setup)
+- [Migrate Database](#migrate-database)
 
 ## Technologies
 
@@ -29,3 +30,15 @@ An API that provides all information and data about [Hunters Food App](https://g
 4. Run project.
 
    `uvicorn main:app --reload`
+
+## Migrate Database
+
+When you modify one of the database models you need to make a migration.
+
+1. Create a revision.
+
+   `alembic revision --autogenerate -m "<description>"`
+
+2. Push updates to database after create a revision.
+
+   `alembic upgrade head`
