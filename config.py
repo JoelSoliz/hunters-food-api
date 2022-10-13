@@ -7,6 +7,8 @@ class Settings(BaseSettings):
     db_name: str
     db_password: str
     db_user: str
+    jwt_secret_key: str
+    jwt_refresh_secret_key: str
 
     class Config:
         env_file = ".env"

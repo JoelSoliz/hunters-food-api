@@ -1,5 +1,7 @@
 alembic
 fastapi
 mysqlclient
+passlib[bcrypt]
+python-jose[cryptography]
 sqlalchemy
 uvicorn[standard]

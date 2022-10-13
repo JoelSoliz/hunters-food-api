@@ -27,7 +27,9 @@ An API that provides all information and data about [Hunters Food App](https://g
 
    `pip install -r requirements.txt`
 
-4. Run project.
+4. Update `.env` file with required information.
+
+5. Run project.
 
    `uvicorn main:app --reload`
 
