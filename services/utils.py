@@ -9,11 +9,9 @@ from config import get_settings
 
 
 settings = get_settings()
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24  # 30 minutes
-REFRESH_TOKEN_EXPIRE_MINUTES = 60 * 24 * 7  # 7 days
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = settings.jwt_secret_key
-JWT_REFRESH_SECRET_KEY = settings.jwt_refresh_secret_key
 
 password_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -38,15 +36,4 @@ def create_access_token(subject: Union[str, Any], expires_delta: int = None) -> 
 
     to_encode = {"exp": expires_delta, "sub": str(subject)}
     encoded_jwt = jwt.encode(to_encode, JWT_SECRET_KEY, ALGORITHM)
-    return encoded_jwt
-
-
-def create_refresh_token(subject: Union[str, Any], expires_delta: int = None) -> str:
-    if expires_delta is not None:
-        expires_delta = datetime.utcnow() + expires_delta
-    else:
-        expires_delta = datetime.utcnow() + timedelta(minutes=REFRESH_TOKEN_EXPIRE_MINUTES)
-
-    to_encode = {"exp": expires_delta, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, JWT_REFRESH_SECRET_KEY, ALGORITHM)
     return encoded_jwt
