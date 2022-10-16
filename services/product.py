@@ -9,7 +9,7 @@ class ProductService:
     def __init__(self, session: Session):
         self.session = session
 
-    def get_products(self, current_page, page_count=5):
+    def get_products(self, current_page, page_count=10):
         results = self.session.query(Product).offset(
             (current_page-1)*page_count).limit(page_count).all()  
         count_data = self.session.query(Product).filter(
