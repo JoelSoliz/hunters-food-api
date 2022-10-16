@@ -11,7 +11,6 @@ class Product(Base):
         ForeignKey('product_type.id_product_type')
     )
     id_business = Column(String(4), ForeignKey('business.id_business'))
-    id_user = Column(String(4), ForeignKey('user.id_user'))
     name_product = Column(String(100), nullable=False)
     price = Column(FLOAT(10.2), nullable=False)
     image_product = Column(BLOB, nullable=False)
