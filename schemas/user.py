@@ -13,6 +13,10 @@ class UserCreate(UserBase):
     date_of_birth: datetime
 
 
+class UserLogin(UserBase):
+    password: str
+
+
 class User(UserBase):
     name: str
     surname: str
@@ -20,3 +24,8 @@ class User(UserBase):
 
     class Config:
         orm_mode = True
+
+
+class UserToken(BaseModel):
+    access_token: str
+    token_type: str
