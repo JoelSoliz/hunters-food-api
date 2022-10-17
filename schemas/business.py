@@ -2,18 +2,17 @@ from pydantic import BaseModel
 
 
 class BusinessBase(BaseModel):
+    name: str
     category: str
 
 
 class BusinessCreate(BusinessBase):
-    id_user: str
-    name_business: str
     location: str
+    descriptionn: str
    
 
-
 class Business(BusinessBase):
-    name_business: str
+    id_business: str
 
     class Config:
         orm_mode = True

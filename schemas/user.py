@@ -18,6 +18,7 @@ class UserLogin(UserBase):
 
 
 class User(UserBase):
+    id_user: str
     name: str
     surname: str
     date_of_birth: datetime
