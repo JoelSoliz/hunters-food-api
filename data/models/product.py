@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, DateTime, FLOAT, ForeignKey, BLOB
+from sqlalchemy import Column, String, DateTime, FLOAT, ForeignKey, LargeBinary, Integer
 
 from data import Base
 
@@ -6,14 +6,13 @@ from data import Base
 class Product(Base):
     __tablename__ = 'product'
     id_product = Column(String(4), primary_key=True)
-    id_product_type = Column(
-        String(4),
-        ForeignKey('product_type.id_product_type')
-    )
     id_business = Column(String(4), ForeignKey('business.id_business'))
-    name_product = Column(String(100), nullable=False)
+    name = Column(String(100), nullable=False)
     price = Column(FLOAT(10.2), nullable=False)
-    image_product = Column(BLOB, nullable=False)
+    product_type = Column(String(100), nullable=False)
+    image = Column(LargeBinary((2**32)-1), nullable=False)
+    discount = Column(FLOAT(10.2), default=0)
+    amount = Column(Integer(), default=0)
     start_time = Column(DateTime(), nullable=False)
     final_time = Column(DateTime(), nullable=False)
 
