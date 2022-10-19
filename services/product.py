@@ -3,6 +3,8 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from data.models import Product
+from schemas.product import ProductBase
+from .utils import generate_id
 
 
 class ProductService:
@@ -11,9 +13,9 @@ class ProductService:
 
     def get_products(self, current_page, page_count=10):
         results = self.session.query(Product).offset(
-            (current_page-1)*page_count).limit(page_count).all()  
+            (current_page-1)*page_count).limit(page_count).all()
         count_data = self.session.query(Product).filter(
-            Product.final_time > datetime.now()).count()  
+            Product.final_time > datetime.now()).count()
 
         if count_data:
             dictionary = {'results': list(results),
@@ -29,3 +31,14 @@ class ProductService:
                           'element_per_page': 0}
 
         return dictionary
+
+    def register_product(self, product: ProductBase, image):
+        id_product = generate_id()
+        db_product = Product(id_product=id_product, id_business=product.id_business,
+                             name=product.name, price=product.price, product_type=product.product_type, image=image, discount=product.discount, amount=product.amount, start_time=product.start_time, final_time=product.final_time)
+
+        self.session.add(db_product)
+        self.session.commit()
+        self.session.refresh(db_product)
+
+        return db_product
