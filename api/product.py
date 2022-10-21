@@ -1,8 +1,10 @@
+from http.client import HTTPException
 from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
 from .dependencies import get_current_user, get_db_session
-from schemas.product import Product, ProductBase
+from schemas.product import Product, ProductBase, ProductPaginated
 from schemas.user import User
 from services.product import ProductService
 
@@ -10,7 +12,7 @@ from services.product import ProductService
 product_router = APIRouter(prefix='/product')
 
 
-@product_router.get('/')
+@product_router.get('/', response_model=ProductPaginated)
 def get_products(current_page: int, session: Session = Depends(get_db_session)):
     product_service = ProductService(session)
     return product_service.get_products(current_page)
@@ -20,3 +22,16 @@ def get_products(current_page: int, session: Session = Depends(get_db_session)):
 def add_product(product: ProductBase = Depends(), image: UploadFile = File(), session: Session = Depends(get_db_session), _: User = Depends(get_current_user)):
     product_service = ProductService(session)
     return product_service.register_product(product, image.file.read())
+
+
+@product_router.get("/{id}/image")
+def get_product_image(id, session: Session = Depends(get_db_session)):
+    product_service = ProductService(session)
+    product = product_service.get_product(id)
+    if not product:
+        return HTTPException(
+            status_code=404,
+            detail="Product not found"
+        )
+
+    return Response(product.image, media_type="image/*")

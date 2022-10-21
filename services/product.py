@@ -12,7 +12,7 @@ class ProductService:
         self.session = session
 
     def get_products(self, current_page, page_count=10):
-        results = self.session.query(Product).offset(
+        results = self.session.query(Product).filter(Product.final_time > datetime.now()).order_by(Product.final_time).offset(
             (current_page-1)*page_count).limit(page_count).all()
         count_data = self.session.query(Product).filter(
             Product.final_time > datetime.now()).count()
@@ -42,3 +42,8 @@ class ProductService:
         self.session.refresh(db_product)
 
         return db_product
+
+    def get_product(self, product_id) -> Product:
+        product = self.session.query(Product).filter(
+            Product.id_product == product_id)
+        return product.first()
