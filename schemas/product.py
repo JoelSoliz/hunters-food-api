@@ -18,3 +18,14 @@ class Product(ProductBase):
 
     class Config:
         orm_mode = True
+
+
+class ProductPaginated(BaseModel):
+    results: list[Product]
+    current_page: int
+    total_pages: int
+    total_elements: int
+    element_per_page: int
+
+    class Config:
+        orm_mode = True
