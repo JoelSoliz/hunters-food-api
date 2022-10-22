@@ -43,6 +43,11 @@ class ProductService:
 
         return db_product
 
+    def get_product(self, product_id) -> Product:
+        product = self.session.query(Product).filter(
+            Product.id_product == product_id)
+        return product.first()
+
     def update_product(self, id, product: ProductUpdate):
         update = self.session.query(Product).filter(Product.id_product==id).update({'name':product.name,
                                                     'product_type':product.product_type, 'price':product.price, 'discount':product.discount,
