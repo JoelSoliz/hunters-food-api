@@ -15,7 +15,8 @@ def get_db_session():
         session.close()
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
+oauth3_scheme = OAuth2PasswordBearer(tokenUrl="/business/token")
 config = get_settings()
 
 
@@ -40,3 +41,4 @@ def get_current_user(session: Session = Depends(get_db_session), token: str = De
         raise credentials_exception
 
     return user
+    

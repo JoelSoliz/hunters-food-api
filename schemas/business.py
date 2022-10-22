@@ -9,7 +9,7 @@ class BusinessBase(BaseModel):
 class BusinessCreate(BusinessBase):
     location: str
     descriptionn: str
-   
+
 
 class Business(BusinessBase):
     id_business: str

@@ -13,3 +13,4 @@ business_router = APIRouter(prefix='/business')
 def register_business(business: BusinessCreate = Depends(), image_logo: UploadFile = File(), session: Session = Depends(get_db_session), user: User=Depends(get_current_user)):
     business_service = BusinessService(session)
     return business_service.register_business(user.id_user, business, image_logo.file.read())
+    
