@@ -29,3 +29,12 @@ class ProductPaginated(BaseModel):
 
     class Config:
         orm_mode = True
+
+class ProductUpdate(BaseModel):
+    name: str
+    product_type: str
+    price: float
+    discount: float
+    start_time: datetime
+    final_time: datetime
+    amount: int

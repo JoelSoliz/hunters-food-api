@@ -4,7 +4,7 @@ from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
 from .dependencies import get_current_user, get_db_session
-from schemas.product import Product, ProductBase, ProductPaginated
+from schemas.product import Product, ProductBase, ProductPaginated, ProductUpdate
 from schemas.user import User
 from services.product import ProductService
 
@@ -35,3 +35,8 @@ def get_product_image(id, session: Session = Depends(get_db_session)):
         )
 
     return Response(product.image, media_type="image/*")
+
+@product_router.put('/update')
+def update_product(id:str, product: ProductUpdate, session: Session = Depends(get_db_session)):
+    product_service = ProductService(session)
+    return product_service.update_product(id, product)
