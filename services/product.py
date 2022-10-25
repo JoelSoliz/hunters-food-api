@@ -48,9 +48,9 @@ class ProductService:
             Product.id_product == product_id)
         return product.first()
 
-    def update_product(self, id, product: ProductUpdate):
-        update = self.session.query(Product).filter(Product.id_product==id).update({'name':product.name,
-                                                    'product_type':product.product_type, 'price':product.price, 'discount':product.discount,
-                                                    'start_time':product.start_time, 'final_time':product.final_time, 'amount':product.amount})
+    def update_product(self, id, image, product: ProductUpdate):
+        update = self.session.query(Product).filter(Product.id_product == id).update({'name': product.name,
+                                                                                       'product_type': product.product_type, 'image':image, 'price': product.price,'discount': product.discount,
+                                                                                       'start_time': product.start_time, 'final_time': product.final_time, 'amount': product.amount})
         self.session.commit()
         return update
