@@ -15,6 +15,7 @@ class Product(Base):
     amount = Column(Integer(), default=0)
     start_time = Column(DateTime(), nullable=False)
     final_time = Column(DateTime(), nullable=False)
+    description = Column(String(256), nullable=False)
 
     def __str__(self):
         return self.name_product

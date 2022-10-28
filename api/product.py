@@ -36,7 +36,7 @@ def get_product_image(id, session: Session = Depends(get_db_session)):
 
     return Response(product.image, media_type="image/*")
 
-@product_router.put('/update')
-def update_product(id:str, product: ProductUpdate, session: Session = Depends(get_db_session), image: UploadFile = File()):
+@product_router.put('/{id}', response_model=Product)
+def update_product(id:str, product: ProductUpdate=Depends(), session: Session = Depends(get_db_session), image: UploadFile = File()):
     product_service = ProductService(session)
     return product_service.update_product(id, image.file.read(), product)
