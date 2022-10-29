@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi import APIRouter, Depends, UploadFile, File, status, HTTPException
 from sqlalchemy.orm import Session
 
 from api.dependencies import get_db_session, get_current_user
@@ -17,4 +17,7 @@ def register_business(business: BusinessCreate = Depends(), image_logo: UploadFi
 @business_router.get("/{id}", response_model=ShowBusiness)
 def get_businesss(id: str, session: Session = Depends(get_db_session)):
     business_service = BusinessService(session)
-    return business_service.get_business(id)
+    business = business_service.get_business(id)
+    if not business:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"posts id {id} not found. ")  
+    return business
