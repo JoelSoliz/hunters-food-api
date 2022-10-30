@@ -11,6 +11,7 @@ class ProductBase(BaseModel):
     start_time: datetime
     final_time: datetime
     amount: int
+    description: str
 
 
 class Product(ProductBase):

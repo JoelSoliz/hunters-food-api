@@ -1,5 +1,4 @@
-from http.client import HTTPException
-from fastapi import APIRouter, Depends, UploadFile, File
+from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
@@ -35,3 +34,14 @@ def get_product_image(id, session: Session = Depends(get_db_session)):
         )
 
     return Response(product.image, media_type="image/*")
+
+@product_router.put('/{id}', response_model=Product)
+def update_product(id:str, product: ProductBase=Depends(), session: Session = Depends(get_db_session), image: UploadFile = File()):
+    product_service = ProductService(session)
+    get_product = product_service.get_product(id)
+    if not get_product:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"posts id {id} not found. ")  
+    
+    product_service.update_product(id, image.file.read(), product, get_product)  
+    
+    return get_product
