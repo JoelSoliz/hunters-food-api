@@ -3,7 +3,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 
 from data.models import Product
-from schemas.product import ProductBase, ProductUpdate
+from schemas.product import ProductBase
 from .utils import generate_id
 
 
@@ -48,10 +48,16 @@ class ProductService:
             Product.id_product == product_id)
         return product.first()
 
-    def update_product(self, id, image, product: ProductUpdate, get_product):       
-        self.session.query(Product).filter(Product.id_product == id).update({'name': product.name,
-                                                                                       'product_type': product.product_type, 'image':image, 'price': product.price,'discount': product.discount,
-                                                                                       'start_time': product.start_time, 'final_time': product.final_time, 'amount': product.amount, 'description': product.description})
+    def update_product(self, id, image, product: ProductBase, get_product):
+        self.session.query(Product).filter(Product.id_product == id).update({'id_business':product.id_business,
+                                                                             'name': product.name,
+                                                                             'product_type': product.product_type,
+                                                                             'image': image, 'price': product.price,
+                                                                             'discount': product.discount,
+                                                                             'start_time': product.start_time,
+                                                                             'final_time': product.final_time,
+                                                                             'amount': product.amount,
+                                                                             'description': product.description})
         self.session.commit()
         self.session.refresh(get_product)
         return get_product
