@@ -19,3 +19,12 @@ class BusinessService:
         self.session.refresh(db_business)
 
         return db_business
+
+    def check_business_by_user(self, id_user, id_business):
+        business = self.session.query(Business).filter(
+            Business.id_business == id_business).first()
+
+        if not business:
+            return False
+
+        return business.id_user == id_user
