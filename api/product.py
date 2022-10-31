@@ -23,6 +23,19 @@ def add_product(product: ProductBase = Depends(), image: UploadFile = File(), se
     return product_service.register_product(product, image.file.read())
 
 
+@product_router.get("/{id}", response_model=Product)
+def get_product(id, session: Session = Depends(get_db_session)):
+    product_service = ProductService(session)
+    product = product_service.get_product(id)
+    if not product:
+        return HTTPException(
+            status_code=404,
+            detail="Product not found"
+        )
+
+    return product
+
+
 @product_router.get("/{id}/image")
 def get_product_image(id, session: Session = Depends(get_db_session)):
     product_service = ProductService(session)
