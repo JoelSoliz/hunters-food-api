@@ -22,3 +22,4 @@ def get_businesss(id: str, session: Session = Depends(get_db_session)):
     if not business:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"posts id {id} not found. ")  
     return business
+
