@@ -10,8 +10,8 @@ class ProductBase(BaseModel):
     discount: float
     start_time: datetime
     final_time: datetime
-    amount: int
-    description: str
+    amount: int = None
+    description: str = None
 
 
 class Product(ProductBase):
