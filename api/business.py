@@ -14,10 +14,7 @@ def register_business(business: BusinessCreate = Depends(), image_logo: UploadFi
     business_service = BusinessService(session)
     return business_service.register_business(user.id_user, business, image_logo.file.read())
 
-<<<<<<< HEAD
 
-=======
->>>>>>> 3fc8260 (shcemas were modified)
 @business_router.get("/{id}", response_model=Business)
 def get_businesss(id: str, session: Session = Depends(get_db_session)):
     business_service = BusinessService(session)
@@ -25,4 +22,3 @@ def get_businesss(id: str, session: Session = Depends(get_db_session)):
     if not business:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f"posts id {id} not found. ")  
     return business
-
