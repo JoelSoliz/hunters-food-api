@@ -28,3 +28,8 @@ class BusinessService:
             return False
 
         return business.id_user == id_user
+        
+    def get_business(self, business_id) -> Business:
+        business = self.session.query(Business).filter(
+            Business.id_business == business_id)
+        return business.first()
