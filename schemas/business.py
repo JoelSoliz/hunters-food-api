@@ -12,7 +12,6 @@ class BusinessCreate(BusinessBase):
     descriptionn: str
     class Config:
         orm_mode = True
-   
 
 class Business(BusinessBase):
     id_business: str
