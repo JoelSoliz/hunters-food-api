@@ -1,5 +1,4 @@
 import math
-from datetime import datetime
 from sqlalchemy.orm import Session
 
 from data.models.business import Business
@@ -11,26 +10,30 @@ class BusinessService:
     def __init__(self, session: Session):
         self.session = session
 
-    def get_Business(self, current_page, page_count=10):
-        results = self.session.query(Business).offset(
-            (current_page-1)*page_count).limit(page_count).all()
-        count_data = self.session.query(Business).filter(
-            Business.final_time > datetime.now()).count()
+    def get_businesses(self, current_page, page_count=10):
+        result_query = self.session.query(Business)
+        results = result_query.offset(
+            (current_page - 1) * page_count).limit(page_count).all()
+        count_data = result_query.count()
 
         if count_data:
-            dictionary = {'results': list(results),
-                          'current_page': current_page,
-                          'total_pages': math.ceil(count_data / page_count),
-                          'total_elements': count_data,
-                          'element_per_page': page_count}
+            data = {
+                'results': list(results),
+                'current_page': current_page,
+                'total_pages': math.ceil(count_data / page_count),
+                'total_elements': count_data,
+                'element_per_page': page_count
+            }
         else:
-            dictionary = {'results': [],
-                          'current_page': 0,
-                          'total_pages': 0,
-                          'total_elements': 0,
-                          'element_per_page': 0}
+            data = {
+                'results': [],
+                'current_page': 0,
+                'total_pages': 0,
+                'total_elements': 0,
+                'element_per_page': 0
+            }
 
-        return dictionary
+        return data
 
     def register_business(self, id_user, business: BusinessCreate, logo):
         id_business = generate_id()

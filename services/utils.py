@@ -9,7 +9,7 @@ from config import get_settings
 
 
 settings = get_settings()
-ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
+ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24 * 30
 ALGORITHM = "HS256"
 JWT_SECRET_KEY = settings.jwt_secret_key
 
