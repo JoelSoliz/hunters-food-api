@@ -11,13 +11,7 @@ from services.product import ProductService
 business_router = APIRouter(prefix='/business')
 
 
-@business_router.post('/register', response_model=Business)
-def register_business(business: BusinessCreate = Depends(), image_logo: UploadFile = File(), session: Session = Depends(get_db_session), user: User = Depends(get_current_user)):
-    business_service = BusinessService(session)
-    return business_service.register_business(user.id_user, business, image_logo.file.read())
-
-
-@business_router.get("/{id}", response_model=Business)
+@business_router.get("/{id}", response_model=Business, tags=["Business"])
 def get_businesss(id: str, session: Session = Depends(get_db_session)):
     business_service = BusinessService(session)
     business = business_service.get_business(id)
@@ -27,7 +21,13 @@ def get_businesss(id: str, session: Session = Depends(get_db_session)):
     return business
 
 
-@business_router.get("/{id}/products", response_model=ProductPaginated)
+@business_router.get("/{id}/products", response_model=ProductPaginated, tags=["Business", "Product"])
 def get_products_by_business(id: str, current_page: int, session: Session = Depends(get_db_session)):
     product_service = ProductService(session)
     return product_service.get_products(current_page, business=id)
+
+
+@business_router.post('/register', response_model=Business, tags=["Business"])
+def register_business(business: BusinessCreate = Depends(), image_logo: UploadFile = File(), session: Session = Depends(get_db_session), user: User = Depends(get_current_user)):
+    business_service = BusinessService(session)
+    return business_service.register_business(user.id_user, business, image_logo.file.read())

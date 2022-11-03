@@ -13,13 +13,39 @@ from services.product import ProductService
 product_router = APIRouter(prefix='/product')
 
 
-@product_router.get('/', response_model=ProductPaginated)
+@product_router.get('/', response_model=ProductPaginated, tags=["Product"])
 def get_products(current_page: int, session: Session = Depends(get_db_session)):
     product_service = ProductService(session)
     return product_service.get_products(current_page)
 
 
-@product_router.post('/register', response_model=Product)
+@product_router.get("/{id}", response_model=Product, tags=["Product"])
+def get_product(id, session: Session = Depends(get_db_session)):
+    product_service = ProductService(session)
+    product = product_service.get_product(id)
+    if not product:
+        raise HTTPException(
+            status_code=404,
+            detail="Product not found"
+        )
+
+    return product
+
+
+@product_router.get("/{id}/image", tags=["Product"])
+def get_product_image(id, session: Session = Depends(get_db_session)):
+    product_service = ProductService(session)
+    product = product_service.get_product(id)
+    if not product:
+        raise HTTPException(
+            status_code=404,
+            detail="Product not found"
+        )
+
+    return Response(product.image, media_type="image/*")
+
+
+@product_router.post('/register', response_model=Product, tags=["Product"])
 def add_product(
     product: ProductBase = Depends(),
     image: UploadFile = File(default=None),
@@ -33,33 +59,7 @@ def add_product(
     return product_service.register_product(product, image)
 
 
-@product_router.get("/{id}", response_model=Product)
-def get_product(id, session: Session = Depends(get_db_session)):
-    product_service = ProductService(session)
-    product = product_service.get_product(id)
-    if not product:
-        raise HTTPException(
-            status_code=404,
-            detail="Product not found"
-        )
-
-    return product
-
-
-@product_router.get("/{id}/image")
-def get_product_image(id, session: Session = Depends(get_db_session)):
-    product_service = ProductService(session)
-    product = product_service.get_product(id)
-    if not product:
-        raise HTTPException(
-            status_code=404,
-            detail="Product not found"
-        )
-
-    return Response(product.image, media_type="image/*")
-
-
-@product_router.put('/{id}', response_model=Product)
+@product_router.put('/{id}', response_model=Product, tags=["Product"])
 def update_product(
     id: str,
     product: ProductBase = Depends(),
