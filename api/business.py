@@ -12,7 +12,7 @@ business_router = APIRouter(prefix='/business')
 
 
 @business_router.get("/{id}", response_model=Business, tags=["Business"])
-def get_businesss(id: str, session: Session = Depends(get_db_session)):
+def get_business(id: str, session: Session = Depends(get_db_session)):
     business_service = BusinessService(session)
     business = business_service.get_business(id)
     if not business:
@@ -23,6 +23,11 @@ def get_businesss(id: str, session: Session = Depends(get_db_session)):
 
 @business_router.get("/{id}/products", response_model=ProductPaginated, tags=["Business", "Product"])
 def get_products_by_business(id: str, current_page: int, session: Session = Depends(get_db_session)):
+    business_service = BusinessService(session)
+    business = business_service.get_business(id)
+    if not business:
+        raise HTTPException(status_code=404, detail="Business not found.")
+
     product_service = ProductService(session)
     return product_service.get_products(current_page, business=id)
 
