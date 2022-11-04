@@ -2,13 +2,19 @@ from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from sqlalchemy.orm import Session
 
 from api.dependencies import get_db_session, get_current_user
-from schemas.business import Business, BusinessCreate
+from schemas.business import Business, BusinessCreate, BusinessPaginated
 from schemas.product import ProductPaginated
 from schemas.user import User
 from services.business import BusinessService
 from services.product import ProductService
 
 business_router = APIRouter(prefix='/business')
+
+
+@business_router.get('/', response_model=BusinessPaginated, tags=["Business"])
+def get_businesses(current_page: int, session: Session = Depends(get_db_session)):
+    business_service = BusinessService(session)
+    return business_service.get_businesses(current_page)
 
 
 @business_router.get("/{id}", response_model=Business, tags=["Business"])
