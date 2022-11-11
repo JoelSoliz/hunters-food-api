@@ -1,4 +1,5 @@
-from sqlalchemy import Column, String, LargeBinary, ForeignKey
+from datetime import datetime
+from sqlalchemy import Column, String, LargeBinary, ForeignKey, DateTime
 
 from data import Base
 
@@ -12,6 +13,7 @@ class Business(Base):
     category = Column(String(70), nullable=False)
     logo = Column(LargeBinary((2**32)-1), nullable=False)
     description = Column(String(256), nullable=False)
+    created_at= Column(DateTime(), default=datetime.now())
 
     def __str__(self):
         return self.name
