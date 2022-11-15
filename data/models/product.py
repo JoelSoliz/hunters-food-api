@@ -7,7 +7,7 @@ class Product(Base):
     __tablename__ = 'product'
     id_product = Column(String(4), primary_key=True)
     id_business = Column(String(4), ForeignKey('business.id_business'))
-    name = Column(String(50), nullable=False)
+    name = Column(String(30), nullable=False)
     price = Column(FLOAT(10.2), nullable=False)
     product_type = Column(String(100), nullable=False)
     image = Column(LargeBinary((2**32)-1))
