@@ -83,3 +83,8 @@ def update_product(
 
     product_service.update_product(id, image, product, get_product)
     return get_product
+
+@product_router.get('/by_category/', response_model=ProductPaginated, tags=["Product"])
+def get_products_by(product_type, current_page: int, session: Session = Depends(get_db_session)):
+    product_servicee = ProductService(session)
+    return product_servicee.get_products_category(product_type, current_page)

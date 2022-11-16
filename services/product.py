@@ -73,3 +73,32 @@ class ProductService:
         self.session.commit()
         self.session.refresh(get_product)
         return get_product
+
+    def get_products_category(self, product_type, current_page, page_count=10, business=None):
+        result_query = self.session.query(Product).filter(
+            Product.final_time > datetime.now())
+        if business:
+            result_query = result_query.filter(Product.id_business == business)
+
+        results = result_query.order_by(Product.final_time).filter(Product.product_type==product_type).offset(
+            (current_page-1)*page_count).limit(page_count).all()
+        count_data = result_query.count()
+
+        if count_data:
+            data = {
+                'results': list(results),
+                'current_page': current_page,
+                'total_pages': math.ceil(count_data / page_count),
+                'total_elements': count_data,
+                'element_per_page': page_count
+            }
+        else:
+            data = {
+                'results': [],
+                'current_page': 0,
+                'total_pages': 0,
+                'total_elements': 0,
+                'element_per_page': 0
+            }
+
+        return data
