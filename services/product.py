@@ -74,7 +74,7 @@ class ProductService:
         self.session.refresh(get_product)
         return get_product
 
-    def get_products_category(self, product_type, current_page, page_count=10, business=None):
+    def get_products_by_category(self, product_type, current_page, page_count=10, business=None):
         result_query = self.session.query(Product).filter(
             Product.final_time > datetime.now())
         if business:
