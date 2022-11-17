@@ -14,9 +14,9 @@ product_router = APIRouter(prefix='/product')
 
 
 @product_router.get('/', response_model=ProductPaginated, tags=["Product"])
-def get_products(current_page: int, session: Session = Depends(get_db_session)):
+def get_products(current_page: int, session: Session = Depends(get_db_session), product_type=None):
     product_service = ProductService(session)
-    return product_service.get_products(current_page)
+    return product_service.get_products(current_page, product_type=product_type)
 
 
 @product_router.get("/{id}", response_model=Product, tags=["Product"])
@@ -83,8 +83,3 @@ def update_product(
 
     product_service.update_product(id, image, product, get_product)
     return get_product
-
-@product_router.get('/by_category/', response_model=ProductPaginated, tags=["Product"])
-def get_products_by_category(product_type, current_page: int, session: Session = Depends(get_db_session)):
-    product_servicee = ProductService(session)
-    return product_servicee.get_products_by_category(product_type, current_page)
