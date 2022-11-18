@@ -11,13 +11,15 @@ class ProductService:
     def __init__(self, session: Session):
         self.session = session
 
-    def get_products(self, current_page, page_count=10, business=None, product_type=None):
+    def get_products(self, current_page, page_count=10, business=None, product_type=None, name=None):
         result_query = self.session.query(Product).filter(
             Product.final_time > datetime.now())
         if business:
             result_query = result_query.filter(Product.id_business == business)
         if product_type:
             result_query = result_query.filter(Product.product_type==product_type)
+        if name:
+            result_query = result_query.filter(Product.name.like(f'%{name[:5]}%'))
 
         results = result_query.order_by(Product.final_time).offset(
             (current_page-1)*page_count).limit(page_count).all()
@@ -75,3 +77,4 @@ class ProductService:
         self.session.commit()
         self.session.refresh(get_product)
         return get_product
+    
