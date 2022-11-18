@@ -19,7 +19,7 @@ class ProductService:
         if product_type:
             result_query = result_query.filter(Product.product_type==product_type)
         if name:
-            result_query = result_query.filter(Product.name.like(f'%{name[:6]}%'))
+            result_query = result_query.filter(Product.name.like(f'%{name}%'))
 
         results = result_query.order_by(Product.final_time).offset(
             (current_page-1)*page_count).limit(page_count).all()
