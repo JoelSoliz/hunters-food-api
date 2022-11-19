@@ -15,7 +15,7 @@ def get_db_session():
         session.close()
 
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/token")
 config = get_settings()
 
 

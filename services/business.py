@@ -12,7 +12,7 @@ class BusinessService:
 
     def get_businesses(self, current_page, page_count=10):
         result_query = self.session.query(Business)
-        results = result_query.order_by(Business.created_at.desc()).offset(
+        results = result_query.order_by(Business.created_at).offset(
             (current_page - 1) * page_count).limit(page_count).all()
         count_data = result_query.count()
 
@@ -54,7 +54,7 @@ class BusinessService:
             return False
 
         return business.id_user == id_user
-        
+
     def get_business(self, business_id) -> Business:
         business = self.session.query(Business).filter(
             Business.id_business == business_id)
