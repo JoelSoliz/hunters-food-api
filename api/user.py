@@ -5,6 +5,7 @@ from api.dependencies import get_db_session, get_current_user
 from schemas.user import User
 from schemas.business import Business
 from services.business import BusinessService
+
 user_router = APIRouter(prefix='/user')
 
 
@@ -15,4 +16,10 @@ def get_me(user: User = Depends(get_current_user)):
 @user_router.get('/business', response_model=Business, tags=["User"])
 def get_business_by_user(session: Session = Depends(get_db_session), user: User = Depends(get_current_user)):
     business_service = BusinessService(session)
-    return business_service.get_user_business(user.id_user)
+    get_business = business_service.get_user_business(user.id_user)
+    if not get_business:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Product {user.id_user} not found"
+        )
+    return get_business
