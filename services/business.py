@@ -59,3 +59,8 @@ class BusinessService:
         business = self.session.query(Business).filter(
             Business.id_business == business_id)
         return business.first()
+
+    def get_user_business(self, user) -> Business:
+        business = self.session.query(Business).filter(
+            Business.id_user == user)
+        return business.first()
