@@ -26,7 +26,7 @@ def get_product(id, session: Session = Depends(get_db_session)):
     if not product:
         raise HTTPException(
             status_code=404,
-            detail="Product not found"
+            detail=f"Product {id} not found"
         )
 
     return product
@@ -39,7 +39,7 @@ def get_product_image(id, session: Session = Depends(get_db_session)):
     if not product:
         raise HTTPException(
             status_code=404,
-            detail="Product not found"
+            detail=f"Product {id} not found"
         )
 
     return Response(product.image, media_type="image/*")
@@ -72,7 +72,7 @@ def update_product(
     get_product = product_service.get_product(id)
     if not get_product:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"posts id {id} not found. ")
+                            detail=f"Product {id} not found. ")
 
     if not business_service.check_business_by_user(
             user.id_user, get_product.id_business):
@@ -83,3 +83,20 @@ def update_product(
 
     product_service.update_product(id, image, product, get_product)
     return get_product
+
+
+@product_router.delete('/{id}', tags=["Product"])
+def delete_product(id: str, session: Session = Depends(get_db_session), user: User = Depends(get_current_user)):
+    product_service = ProductService(session)
+    business_service = BusinessService(session)
+    get_product = product_service.get_product(id)
+    if not get_product:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Product {id} not found. ")
+
+    if not business_service.check_business_by_user(
+            user.id_user, get_product.id_business):
+        raise HTTPException(status_code=401)
+
+    product_service.delete_product(id)
+    return {"message": f"Product {id} successfully removed."}
