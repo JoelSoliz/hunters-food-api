@@ -20,6 +20,6 @@ def get_business_by_user(session: Session = Depends(get_db_session), user: User 
     if not get_business:
         raise HTTPException(
             status_code=404,
-            detail=f"Product {user.id_user} not found"
+            detail=f"The user {user.id_user} does not have a registered business"
         )
     return get_business
