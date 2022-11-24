@@ -1,7 +1,6 @@
 from sqlalchemy.orm import Session
 
 from data.models import FavoriteBusiness
-from schemas.favoriteBusiness import FavoriteBusinessBase
 from .utils import generate_id
 
 

@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from api import auth, business, favoriteBusiness, product, user
+from api import auth, business, product, user
 
 
 app = FastAPI()
