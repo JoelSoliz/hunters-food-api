@@ -13,13 +13,39 @@ from services.product import ProductService
 product_router = APIRouter(prefix='/product')
 
 
-@product_router.get('/', response_model=ProductPaginated)
-def get_products(current_page: int, session: Session = Depends(get_db_session)):
+@product_router.get('/', response_model=ProductPaginated, tags=["Product"])
+def get_products(current_page: int, session: Session = Depends(get_db_session), product_type=None, name_similar=None):
     product_service = ProductService(session)
-    return product_service.get_products(current_page)
+    return product_service.get_products(current_page, product_type=product_type, name=name_similar)
 
 
-@product_router.post('/register', response_model=Product)
+@product_router.get("/{id}", response_model=Product, tags=["Product"])
+def get_product(id, session: Session = Depends(get_db_session)):
+    product_service = ProductService(session)
+    product = product_service.get_product(id)
+    if not product:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Product {id} not found"
+        )
+
+    return product
+
+
+@product_router.get("/{id}/image", tags=["Product"])
+def get_product_image(id, session: Session = Depends(get_db_session)):
+    product_service = ProductService(session)
+    product = product_service.get_product(id)
+    if not product:
+        raise HTTPException(
+            status_code=404,
+            detail=f"Product {id} not found"
+        )
+
+    return Response(product.image, media_type="image/*")
+
+
+@product_router.post('/register', response_model=Product, tags=["Product"])
 def add_product(
     product: ProductBase = Depends(),
     image: UploadFile = File(default=None),
@@ -33,33 +59,7 @@ def add_product(
     return product_service.register_product(product, image)
 
 
-@product_router.get("/{id}", response_model=Product)
-def get_product(id, session: Session = Depends(get_db_session)):
-    product_service = ProductService(session)
-    product = product_service.get_product(id)
-    if not product:
-        raise HTTPException(
-            status_code=404,
-            detail="Product not found"
-        )
-
-    return product
-
-
-@product_router.get("/{id}/image")
-def get_product_image(id, session: Session = Depends(get_db_session)):
-    product_service = ProductService(session)
-    product = product_service.get_product(id)
-    if not product:
-        raise HTTPException(
-            status_code=404,
-            detail="Product not found"
-        )
-
-    return Response(product.image, media_type="image/*")
-
-
-@product_router.put('/{id}', response_model=Product)
+@product_router.put('/{id}', response_model=Product, tags=["Product"])
 def update_product(
     id: str,
     product: ProductBase = Depends(),
@@ -72,7 +72,7 @@ def update_product(
     get_product = product_service.get_product(id)
     if not get_product:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"posts id {id} not found. ")
+                            detail=f"Product {id} not found. ")
 
     if not business_service.check_business_by_user(
             user.id_user, get_product.id_business):
@@ -83,3 +83,20 @@ def update_product(
 
     product_service.update_product(id, image, product, get_product)
     return get_product
+
+
+@product_router.delete('/{id}', tags=["Product"])
+def delete_product(id: str, session: Session = Depends(get_db_session), user: User = Depends(get_current_user)):
+    product_service = ProductService(session)
+    business_service = BusinessService(session)
+    get_product = product_service.get_product(id)
+    if not get_product:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Product {id} not found. ")
+
+    if not business_service.check_business_by_user(
+            user.id_user, get_product.id_business):
+        raise HTTPException(status_code=401)
+
+    product_service.delete_product(id)
+    return {"message": f"Product {id} successfully removed."}

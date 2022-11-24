@@ -1,8 +1,8 @@
-"""we add a new field to business
+"""modified product table and business table
 
-Revision ID: fb46d3b7b4b4
-Revises: 1f0352ca0cd1
-Create Date: 2022-10-16 19:49:59.819665
+Revision ID: 6e5d9127ca6e
+Revises: 0b16c2a94e12
+Create Date: 2022-11-15 13:30:17.063845
 
 """
 from alembic import op
@@ -10,8 +10,8 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'fb46d3b7b4b4'
-down_revision = '1f0352ca0cd1'
+revision = '6e5d9127ca6e'
+down_revision = '0b16c2a94e12'
 branch_labels = None
 depends_on = None
 
