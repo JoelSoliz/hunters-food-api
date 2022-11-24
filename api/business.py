@@ -8,8 +8,8 @@ from schemas.product import ProductPaginated
 from schemas.user import User
 from services.business import BusinessService
 from services.product import ProductService
-from schemas.favoriteBusiness import FavoriteBusiness
-from services.favoriteBusiness import FavoriteService
+from schemas.favorite import FavoriteBusiness
+from services.favorite import FavoriteService
 
 business_router = APIRouter(prefix='/business')
 
