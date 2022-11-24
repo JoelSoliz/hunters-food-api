@@ -8,6 +8,8 @@ from schemas.product import ProductPaginated
 from schemas.user import User
 from services.business import BusinessService
 from services.product import ProductService
+from schemas.favorite import FavoriteBusiness
+from services.favorite import FavoriteService
 
 business_router = APIRouter(prefix='/business')
 
@@ -56,3 +58,14 @@ def get_products_by_business(id: str, current_page: int, session: Session = Depe
 def register_business(business: BusinessCreate = Depends(), image_logo: UploadFile = File(), session: Session = Depends(get_db_session), user: User = Depends(get_current_user)):
     business_service = BusinessService(session)
     return business_service.register_business(user.id_user, business, image_logo.file.read())
+
+
+@business_router.post('/add_favorite', response_model=FavoriteBusiness, tags=["Favorite"])
+def add_favorite_business(id_business,
+                          session: Session = Depends(get_db_session),
+                          user: User = Depends(get_current_user)
+                          ):
+    favorite_service = FavoriteService(session)
+    favorite_business = favorite_service.add_favorite_business(
+        user.id_user, id_business)
+    return favorite_business
