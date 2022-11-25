@@ -1,3 +1,5 @@
+import os
+import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -21,3 +23,8 @@ app.include_router(user.user_router)
 @app.get("/")
 def root():
     return {"message": "Hello World"}
+
+
+if __name__ == "__main__":
+    port = os.getenv('PORT', default=8000)
+    uvicorn.run("main:app", host="0.0.0.0", port=int(port))
