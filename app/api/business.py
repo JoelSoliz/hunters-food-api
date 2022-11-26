@@ -4,12 +4,13 @@ from sqlalchemy.orm import Session
 
 from api.dependencies import get_db_session, get_current_user
 from schemas.business import Business, BusinessCreate, BusinessPaginated
+from schemas.favorite import FavoriteBusiness
 from schemas.product import ProductPaginated
 from schemas.user import User
-from schemas.favorite import FavoriteBusiness
+from services.auth import AuthenticationService
 from services.business import BusinessService
-from services.product import ProductService
 from services.favorite import FavoriteService
+from services.product import ProductService
 
 
 business_router = APIRouter(prefix='/business')
@@ -72,17 +73,12 @@ def add_favorite_business(id_business,
     return favorite_business
 
 
-@business_router.post('/delete_favorite', tags=["Favorite"])
-def delete_favorite_business(id_favorite, id_business, session: Session = Depends(get_db_session)):
+@business_router.delete('/favorite/{id}', tags=["Favorite"])
+def delete_favorite_business(id, session: Session = Depends(get_db_session), user: User = Depends(get_current_user)):
     favorite_service = FavoriteService(session)
-    business_service = BusinessService(session)
-    get_favorite = favorite_service.get_favorite(id_favorite)
-    get_business = business_service.get_business(id_business)
+    get_favorite = favorite_service.get_favorite(id, user.id_user)
     if not get_favorite:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Favorite {id_favorite} not found. ")
-    if not get_business:
-        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
-                            detail=f"Product {id_business} not found. ")
-    favorite_service.delete_favorite(id_favorite)
-    return {"message": f"Favorite {id_favorite} successfully removed."}
+        raise HTTPException(status_code=403,
+                            detail=f"{id} does not have permission. ")
+    favorite_service.delete_favorite(id)
+    return {"message": f"Favorite {id} successfully removed."}

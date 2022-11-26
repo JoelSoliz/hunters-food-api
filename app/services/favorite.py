@@ -19,9 +19,9 @@ class FavoriteService:
 
         return db_favorite
     
-    def get_favorite(self, favorite_id) -> FavoriteBusiness:
+    def get_favorite(self, favorite_id, id_user) -> FavoriteBusiness:
         favorite = self.session.query(FavoriteBusiness).filter(
-            FavoriteBusiness.id_favorite == favorite_id)
+            FavoriteBusiness.id_favorite == favorite_id, FavoriteBusiness.id_user == id_user)
         return favorite.first()
 
     def delete_favorite(self, id_favorite):
