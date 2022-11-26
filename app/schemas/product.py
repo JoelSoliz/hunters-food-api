@@ -30,3 +30,7 @@ class ProductPaginated(BaseModel):
 
     class Config:
         orm_mode = True
+
+
+class ProductWithBusiness(Product):
+    business: str
