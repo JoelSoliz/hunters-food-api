@@ -7,7 +7,6 @@ from schemas.business import Business, BusinessCreate, BusinessPaginated
 from schemas.favorite import FavoriteBusiness
 from schemas.product import ProductPaginated
 from schemas.user import User
-from services.auth import AuthenticationService
 from services.business import BusinessService
 from services.favorite import FavoriteService
 from services.product import ProductService

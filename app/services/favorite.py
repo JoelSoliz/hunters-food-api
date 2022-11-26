@@ -28,3 +28,4 @@ class FavoriteService:
         self.session.query(FavoriteBusiness).filter(
             FavoriteBusiness.id_favorite == id_favorite).delete()
         self.session.commit()
+        
