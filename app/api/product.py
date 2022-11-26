@@ -2,11 +2,10 @@ from fastapi import APIRouter, Depends, UploadFile, File, HTTPException, status
 from fastapi.responses import Response
 from sqlalchemy.orm import Session
 
-from services.business import BusinessService
-
 from .dependencies import get_current_user, get_db_session
-from schemas.product import Product, ProductBase, ProductPaginated
+from schemas.product import Product, ProductBase, ProductPaginated, ProductWithBusiness
 from schemas.user import User
+from services.business import BusinessService
 from services.product import ProductService
 
 
@@ -19,7 +18,7 @@ def get_products(current_page: int, session: Session = Depends(get_db_session), 
     return product_service.get_products(current_page, product_type=product_type, name=name_similar)
 
 
-@product_router.get("/{id}", response_model=Product, tags=["Product"])
+@product_router.get("/{id}", response_model=ProductWithBusiness, tags=["Product"])
 def get_product(id, session: Session = Depends(get_db_session)):
     product_service = ProductService(session)
     product = product_service.get_product(id)
@@ -29,6 +28,9 @@ def get_product(id, session: Session = Depends(get_db_session)):
             detail=f"Product {id} not found"
         )
 
+    business_service = BusinessService(session)
+    business = business_service.get_business(product.id_business)
+    product.business = business.name
     return product
 
 
