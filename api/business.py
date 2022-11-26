@@ -6,10 +6,11 @@ from api.dependencies import get_db_session, get_current_user
 from schemas.business import Business, BusinessCreate, BusinessPaginated
 from schemas.product import ProductPaginated
 from schemas.user import User
+from schemas.favorite import FavoriteBusiness, FavoriteBusinessBase
 from services.business import BusinessService
 from services.product import ProductService
-from schemas.favorite import FavoriteBusiness
 from services.favorite import FavoriteService
+
 
 business_router = APIRouter(prefix='/business')
 
@@ -69,3 +70,19 @@ def add_favorite_business(id_business,
     favorite_business = favorite_service.add_favorite_business(
         user.id_user, id_business)
     return favorite_business
+
+
+@business_router.post('/delete_favorite', tags=["Favorite"])
+def delete_favorite_business(id_favorite, id_business, session: Session = Depends(get_db_session)):
+    favorite_service = FavoriteService(session)
+    business_service = BusinessService(session)
+    get_favorite = favorite_service.get_favorite(id_favorite)
+    get_business = business_service.get_business(id_business)
+    if not get_favorite:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Favorite {id_favorite} not found. ")
+    if not get_business:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND,
+                            detail=f"Product {id_business} not found. ")
+    favorite_service.delete_favorite(id_favorite)
+    return {"message": f"Favorite {id_favorite} successfully removed."}
