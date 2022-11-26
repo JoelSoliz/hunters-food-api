@@ -6,7 +6,7 @@ from api.dependencies import get_db_session, get_current_user
 from schemas.business import Business, BusinessCreate, BusinessPaginated
 from schemas.product import ProductPaginated
 from schemas.user import User
-from schemas.favorite import FavoriteBusiness, FavoriteBusinessBase
+from schemas.favorite import FavoriteBusiness
 from services.business import BusinessService
 from services.product import ProductService
 from services.favorite import FavoriteService
