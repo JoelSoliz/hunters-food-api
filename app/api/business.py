@@ -4,12 +4,13 @@ from sqlalchemy.orm import Session
 
 from api.dependencies import get_db_session, get_current_user
 from schemas.business import Business, BusinessCreate, BusinessPaginated
+from schemas.favorite import FavoriteBusiness
 from schemas.product import ProductPaginated
 from schemas.user import User
 from services.business import BusinessService
-from services.product import ProductService
-from schemas.favorite import FavoriteBusiness
 from services.favorite import FavoriteService
+from services.product import ProductService
+
 
 business_router = APIRouter(prefix='/business')
 
@@ -69,3 +70,14 @@ def add_favorite_business(id_business,
     favorite_business = favorite_service.add_favorite_business(
         user.id_user, id_business)
     return favorite_business
+
+
+@business_router.delete('/favorite/{id}', tags=["Favorite"])
+def delete_favorite_business(id, session: Session = Depends(get_db_session), user: User = Depends(get_current_user)):
+    favorite_service = FavoriteService(session)
+    get_favorite = favorite_service.get_favorite(id, user.id_user)
+    if not get_favorite:
+        raise HTTPException(status_code=403,
+                            detail=f"{id} does not have permission. ")
+    favorite_service.delete_favorite(id)
+    return {"message": f"Favorite {id} successfully removed."}
