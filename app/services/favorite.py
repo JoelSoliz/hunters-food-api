@@ -18,14 +18,18 @@ class FavoriteService:
         self.session.refresh(db_favorite)
 
         return db_favorite
-    
+
     def get_favorite(self, favorite_id, id_user) -> FavoriteBusiness:
         favorite = self.session.query(FavoriteBusiness).filter(
             FavoriteBusiness.id_favorite == favorite_id, FavoriteBusiness.id_user == id_user)
         return favorite.first()
 
+    def get_favorites_by_user(self, id_user):
+        favorites = self.session.query(FavoriteBusiness).filter(
+            FavoriteBusiness.id_user == id_user)
+        return favorites.all()
+
     def delete_favorite(self, id_favorite):
         self.session.query(FavoriteBusiness).filter(
             FavoriteBusiness.id_favorite == id_favorite).delete()
         self.session.commit()
-        
