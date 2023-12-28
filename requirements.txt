@@ -1,5 +1,5 @@
 alembic
-fastapi
+fastapi==0.85.0
 mysqlclient
 passlib[bcrypt]
 python-jose[cryptography]
